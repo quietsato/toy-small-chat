@@ -17,6 +17,14 @@
 
 ## 実行
 
+api/.env ファイルの準備
+
+```
+cp ./api/.env.example ./api/.env
+```
+
+コンテナの立ち上げ
+
 ```
 docker compose up
 ```
