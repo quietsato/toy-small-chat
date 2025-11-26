@@ -12,8 +12,3 @@ jobs:
            with:
               go-version-file: api/go.mod
          - run: go test -coverprofile=cover.out ./...
-         - uses: vladopajic/go-test-coverage@v2
-           with:
-              profile: api/cover.out
-              git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
-              git-branch: badges

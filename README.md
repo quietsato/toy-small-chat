@@ -1,7 +1,5 @@
 # Toy Small Chat
 
-![coverage](https://raw.githubusercontent.com/quietsato/toy-small-chat/badges/.badges/main/coverage.svg)
-
 ## 構成
 
 ### api
