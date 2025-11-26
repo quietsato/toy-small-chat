@@ -144,7 +144,10 @@ func TestLoginUsecase_Execute(t *testing.T) {
 }
 
 func TestNewLoginUsecase(t *testing.T) {
+	t.Parallel()
+
 	t.Run("正しく初期化される", func(t *testing.T) {
+		t.Parallel()
 		mockQP := &mockAccountQueryProcessor{}
 		mockAuth := &mockAuthService{}
 

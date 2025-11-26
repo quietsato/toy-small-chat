@@ -98,7 +98,10 @@ func TestGetRoomsController_GetRooms(t *testing.T) {
 }
 
 func TestNewGetRoomsController(t *testing.T) {
+	t.Parallel()
+
 	t.Run("正しく初期化される", func(t *testing.T) {
+		t.Parallel()
 		mockQP := &mockRoomQueryProcessor{}
 
 		ctrl := controller.NewGetRoomsController(mockQP)

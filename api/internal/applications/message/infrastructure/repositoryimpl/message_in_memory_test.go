@@ -50,7 +50,10 @@ func TestInMemoryMessageRepository_CreateMessage(t *testing.T) {
 }
 
 func TestNewInMemoryMessageRepository(t *testing.T) {
+	t.Parallel()
+
 	t.Run("正しく初期化される", func(t *testing.T) {
+		t.Parallel()
 		msgs := make([]repositoryimpl.Message, 0)
 		repo := repositoryimpl.NewInMemoryMessageRepository(t.Context(), &msgs)
 

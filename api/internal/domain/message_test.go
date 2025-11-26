@@ -11,7 +11,10 @@ import (
 )
 
 func TestParseMessageID(t *testing.T) {
+	t.Parallel()
+
 	t.Run("valid UUID", func(t *testing.T) {
+		t.Parallel()
 		validUUID := "550e8400-e29b-41d4-a716-446655440000"
 		messageID, err := domain.ParseMessageID(validUUID)
 		require.NoError(t, err)
@@ -19,23 +22,31 @@ func TestParseMessageID(t *testing.T) {
 	})
 
 	t.Run("invalid UUID", func(t *testing.T) {
+		t.Parallel()
+
 		_, err := domain.ParseMessageID("not-a-uuid")
 		require.Error(t, err)
 	})
 
 	t.Run("empty string", func(t *testing.T) {
+		t.Parallel()
+
 		_, err := domain.ParseMessageID("")
 		require.Error(t, err)
 	})
 }
 
 func TestMessageIDFromUuid(t *testing.T) {
+	t.Parallel()
+
 	u := uuid.New()
 	messageID := domain.MessageIDFromUuid(u)
 	require.Equal(t, u.String(), messageID.String())
 }
 
 func TestNewMessageContent(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name      string
 		input     string
@@ -53,6 +64,8 @@ func TestNewMessageContent(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			content, err := domain.NewMessageContent(tt.input)
 			if tt.wantError {
 				require.ErrorIs(t, err, domain.ErrInvalidMessageContent)
@@ -65,6 +78,8 @@ func TestNewMessageContent(t *testing.T) {
 }
 
 func TestNewMessage(t *testing.T) {
+	t.Parallel()
+
 	messageID := domain.MessageIDFromUuid(uuid.New())
 	roomID := domain.RoomIDFromUuid(uuid.New())
 	senderID := domain.AccountIDFromUuid(uuid.New())
@@ -81,7 +96,10 @@ func TestNewMessage(t *testing.T) {
 }
 
 func TestNewMessages(t *testing.T) {
+	t.Parallel()
+
 	t.Run("with messages", func(t *testing.T) {
+		t.Parallel()
 		content1, _ := domain.NewMessageContent("Hello")
 		content2, _ := domain.NewMessageContent("World")
 		msg1 := domain.NewMessage(
@@ -104,6 +122,8 @@ func TestNewMessages(t *testing.T) {
 	})
 
 	t.Run("empty", func(t *testing.T) {
+		t.Parallel()
+
 		messages := domain.NewMessages([]domain.Message{})
 		require.Empty(t, messages.List())
 	})

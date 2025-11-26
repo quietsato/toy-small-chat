@@ -55,7 +55,10 @@ func TestAuthServiceImpl_GenerateToken(t *testing.T) {
 }
 
 func TestNewAuthService(t *testing.T) {
+	t.Parallel()
+
 	t.Run("正しく初期化される", func(t *testing.T) {
+		t.Parallel()
 		secretKey := []byte("test-secret-key")
 		auth := serviceimpl.NewAuthService(secretKey)
 
@@ -64,7 +67,10 @@ func TestNewAuthService(t *testing.T) {
 }
 
 func TestAuthServiceImpl_GetTokenAuthForMiddleware(t *testing.T) {
+	t.Parallel()
+
 	t.Run("JWTAuthが取得できる", func(t *testing.T) {
+		t.Parallel()
 		secretKey := []byte("test-secret-key")
 		auth := serviceimpl.NewAuthService(secretKey)
 

@@ -12,7 +12,10 @@ import (
 
 // RoomID tests
 func TestParseRoomID(t *testing.T) {
+	t.Parallel()
+
 	t.Run("valid UUID", func(t *testing.T) {
+		t.Parallel()
 		validUUID := "550e8400-e29b-41d4-a716-446655440000"
 		roomID, err := domain.ParseRoomID(validUUID)
 		require.NoError(t, err)
@@ -20,19 +23,26 @@ func TestParseRoomID(t *testing.T) {
 	})
 
 	t.Run("invalid UUID", func(t *testing.T) {
+		t.Parallel()
+
 		invalidUUID := "not-a-uuid"
 		_, err := domain.ParseRoomID(invalidUUID)
 		require.Error(t, err)
 	})
 
 	t.Run("empty string", func(t *testing.T) {
+		t.Parallel()
+
 		_, err := domain.ParseRoomID("")
 		require.Error(t, err)
 	})
 }
 
 func TestRoomIDFromUuid(t *testing.T) {
+	t.Parallel()
+
 	t.Run("create from UUID", func(t *testing.T) {
+		t.Parallel()
 		u := uuid.New()
 		roomID := domain.RoomIDFromUuid(u)
 		require.Equal(t, u.String(), roomID.String())
@@ -40,7 +50,10 @@ func TestRoomIDFromUuid(t *testing.T) {
 }
 
 func TestRoomID_String(t *testing.T) {
+	t.Parallel()
+
 	t.Run("convert to string", func(t *testing.T) {
+		t.Parallel()
 		validUUID := "550e8400-e29b-41d4-a716-446655440000"
 		roomID, _ := domain.ParseRoomID(validUUID)
 		require.Equal(t, validUUID, roomID.String())
@@ -49,6 +62,8 @@ func TestRoomID_String(t *testing.T) {
 
 // RoomName tests
 func TestNewRoomName(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name      string
 		input     string
@@ -85,6 +100,8 @@ func TestNewRoomName(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			roomName, err := domain.NewRoomName(tt.input)
 			if tt.wantError {
 				require.Error(t, err)
@@ -98,7 +115,10 @@ func TestNewRoomName(t *testing.T) {
 }
 
 func TestRoomName_String(t *testing.T) {
+	t.Parallel()
+
 	t.Run("convert to string", func(t *testing.T) {
+		t.Parallel()
 		input := "test-room"
 		roomName, _ := domain.NewRoomName(input)
 		require.Equal(t, input, roomName.String())
@@ -107,7 +127,10 @@ func TestRoomName_String(t *testing.T) {
 
 // Room tests
 func TestNewRoom(t *testing.T) {
+	t.Parallel()
+
 	t.Run("create room", func(t *testing.T) {
+		t.Parallel()
 		roomID := domain.RoomIDFromUuid(uuid.New())
 		roomName, _ := domain.NewRoomName("test-room")
 		createdBy := domain.AccountIDFromUuid(uuid.New())
@@ -128,7 +151,10 @@ func TestNewRoom(t *testing.T) {
 
 // Rooms tests
 func TestNewRooms(t *testing.T) {
+	t.Parallel()
+
 	t.Run("create rooms list", func(t *testing.T) {
+		t.Parallel()
 		roomID1 := domain.RoomIDFromUuid(uuid.New())
 		roomName1, _ := domain.NewRoomName("room1")
 		roomID2 := domain.RoomIDFromUuid(uuid.New())
@@ -146,6 +172,8 @@ func TestNewRooms(t *testing.T) {
 	})
 
 	t.Run("empty rooms list", func(t *testing.T) {
+		t.Parallel()
+
 		rooms := domain.NewRooms([]domain.Room{})
 		list := rooms.List()
 

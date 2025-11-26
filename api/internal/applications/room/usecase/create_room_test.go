@@ -67,7 +67,10 @@ func TestCreateRoomUsecase_Execute(t *testing.T) {
 }
 
 func TestNewCreateRoomUsecase(t *testing.T) {
+	t.Parallel()
+
 	t.Run("正しく初期化される", func(t *testing.T) {
+		t.Parallel()
 		mockRepo := &mockRoomRepository{}
 
 		uc := usecase.NewCreateRoomUsecase(mockRepo)

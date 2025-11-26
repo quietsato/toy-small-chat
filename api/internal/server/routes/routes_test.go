@@ -16,7 +16,7 @@ import (
 )
 
 func TestPublicRoutes(t *testing.T) {
-
+	t.Parallel()
 }
 
 func TestProtectedRoutes(t *testing.T) {
