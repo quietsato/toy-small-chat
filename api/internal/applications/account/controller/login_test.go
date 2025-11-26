@@ -127,7 +127,10 @@ func TestLoginController_Login(t *testing.T) {
 }
 
 func TestNewLoginController(t *testing.T) {
+	t.Parallel()
+
 	t.Run("正しく初期化される", func(t *testing.T) {
+		t.Parallel()
 		mockQP := &mockAccountQueryProcessor{}
 
 		ctrl := controller.NewLoginController(mockQP)

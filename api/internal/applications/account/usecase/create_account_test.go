@@ -121,7 +121,10 @@ func TestCreateAccountUsecase_Execute(t *testing.T) {
 }
 
 func TestNewCreateAccountUsecase(t *testing.T) {
+	t.Parallel()
+
 	t.Run("正しく初期化される", func(t *testing.T) {
+		t.Parallel()
 		mockRepo := &mockAccountRepository{}
 		mockAuth := &mockAuthService{}
 

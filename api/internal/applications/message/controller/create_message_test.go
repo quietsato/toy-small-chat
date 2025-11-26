@@ -78,7 +78,10 @@ func TestCreateMessageController_CreateMessage(t *testing.T) {
 }
 
 func TestNewCreateMessageController(t *testing.T) {
+	t.Parallel()
+
 	t.Run("正しく初期化される", func(t *testing.T) {
+		t.Parallel()
 		mockRepo := &mockMessageRepository{}
 
 		ctrl := controller.NewCreateMessageController(mockRepo)

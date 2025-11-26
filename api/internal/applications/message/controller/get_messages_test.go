@@ -98,7 +98,10 @@ func TestGetMessagesController_GetMessages(t *testing.T) {
 }
 
 func TestNewGetMessagesController(t *testing.T) {
+	t.Parallel()
+
 	t.Run("正しく初期化される", func(t *testing.T) {
+		t.Parallel()
 		mockQP := &mockMessageQueryProcessor{}
 
 		ctrl := controller.NewGetMessagesController(mockQP)
