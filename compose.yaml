@@ -1,0 +1,48 @@
+services:
+  api:
+    build:
+      context: api
+    ports:
+      - 18081:8080
+    env_file:
+      - ./api/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+  front:
+    build:
+      context: front
+    ports:
+      - 18080:5173
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: toy_small_chat
+    ports:
+      - 15432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./api/internal/db/sql/schema:/docker-entrypoint-initdb.d
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+  # Grafana LGTM Stack (Loki, Grafana, Tempo, Mimir)
+  otel-collector:
+    image: grafana/otel-lgtm:latest
+    ports:
+      - "13000:3000"   # Grafana
+      - "4317:4317"    # OTLP gRPC receiver
+      - "4318:4318"    # OTLP HTTP receiver
+    volumes:
+      - otel_data:/data
+
+volumes:
+  db_data:
+  otel_data:
