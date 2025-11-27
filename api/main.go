@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 	"net/http"
 	"os"
@@ -25,13 +26,12 @@ func main() {
 
 	// Initialize OpenTelemetry tracer
 	shutdownInstr := instrument.Init(ctx, slog.LevelInfo, cfg.OtlpEndpoint)
-	defer shutdownInstr()
 
 	// Initialize database connection pool with tracing
 	pool, err := instrumentdb.NewPool(ctx, cfg.Database.URL())
 	if err != nil {
 		slog.Error("failed to connect to database", slog.Any("err", err))
-		os.Exit(1)
+		return
 	}
 	defer pool.Close()
 	if err := pool.Ping(ctx); err != nil {
@@ -49,21 +49,26 @@ func main() {
 		Handler: handler,
 	}
 
+	done := make(chan error, 1)
 	go func() {
-		err = srv.ListenAndServe()
-		if err != nil {
-			slog.Error("failed to serve", slog.Any("err", err))
-		}
+		done <- srv.ListenAndServe()
 	}()
 
-	<-ctx.Done()
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
+	select {
+	case err := <-done:
+		if !errors.Is(err, http.ErrServerClosed) {
+			slog.Error("failed to serve", slog.Any("err", err))
+		}
+	case <-ctx.Done():
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
 
-	if err := srv.Shutdown(ctx); err != nil {
-		slog.ErrorContext(ctx, "failed to shutdown", slog.Any("err", err))
-		return
+		if err := srv.Shutdown(ctx); err != nil {
+			slog.ErrorContext(ctx, "failed to shutdown", slog.Any("err", err))
+		}
+		shutdownInstr(ctx)
+		pool.Close()
+
+		slog.InfoContext(ctx, "server stopped gracefully")
 	}
-
-	slog.InfoContext(ctx, "server stopped gracefully")
 }
