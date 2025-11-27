@@ -11,4 +11,5 @@ jobs:
          - uses: actions/setup-go@v5
            with:
               go-version-file: api/go.mod
+              cache-dependency-path: api/go.sum
          - run: go test -timeout 300s -coverprofile=cover.out ./...
