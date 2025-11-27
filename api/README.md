@@ -47,3 +47,10 @@ api/
 │           └── infrastructure/
 │               └── {repository,queryprocessor}impl/   # インターフェース実装
 ```
+
+## Future Work
+
+- controller
+    - Controller Input と REST API Spec の分離
+- applications
+    - account, auth のドメイン分割の検討
