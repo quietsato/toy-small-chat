@@ -21,7 +21,7 @@ func setupLogger(logLevel slog.Level) {
 	slog.SetDefault(customLogger)
 }
 
-func Init(ctx context.Context, logLevel slog.Level, otlpEndpoint string) func() {
+func Init(ctx context.Context, logLevel slog.Level, otlpEndpoint string) func(ctx context.Context) {
 	setupLogger(logLevel)
 
 	resource, _ := NewResource()
@@ -35,16 +35,12 @@ func Init(ctx context.Context, logLevel slog.Level, otlpEndpoint string) func() 
 		slog.Error("failed to initialize logger", slog.Any("err", err))
 	}
 
-	return func() {
-		defer func() {
-			if err := shutdown(ctx); err != nil {
-				slog.WarnContext(ctx, "failed to shutdown tracer", slog.Any("err", err))
-			}
-		}()
-		defer func() {
-			if err := loggerProvider.Shutdown(ctx); err != nil {
-				slog.WarnContext(ctx, "failed to shutdown logger provider", slog.Any("err", err))
-			}
-		}()
+	return func(ctx context.Context) {
+		if err := shutdown(ctx); err != nil {
+			slog.WarnContext(ctx, "failed to shutdown tracer", slog.Any("err", err))
+		}
+		if err := loggerProvider.Shutdown(ctx); err != nil {
+			slog.WarnContext(ctx, "failed to shutdown logger provider", slog.Any("err", err))
+		}
 	}
 }
