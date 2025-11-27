@@ -1,5 +1,9 @@
 # Toy Small Chat
 
+<p align="center">
+<img width="250" src="./docs/top.png">
+</p>
+
 ## 構成
 
 ### api
