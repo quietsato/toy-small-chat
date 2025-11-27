@@ -33,7 +33,6 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
-  # Grafana LGTM Stack (Loki, Grafana, Tempo, Mimir)
   otel-collector:
     image: grafana/otel-lgtm:latest
     ports:
